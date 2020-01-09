@@ -1,0 +1,23 @@
+{
+  "name": "react-class-to-function",
+  "version": "1.0.0",
+  "description": "Convert React class to function components",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "react-ctf": "bin/react-ctf.js"
+  },
+  "keywords": [
+    "react"
+  ],
+  "author": "John Kapantzakis",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/parser": "^7.7.7",
+    "esm": "^3.2.25",
+    "yargs": "^15.0.2"
+  },
+  "devDependencies": {}
+}
