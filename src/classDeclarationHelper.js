@@ -20,6 +20,9 @@ export const getFunctionBodyFromClassDeclarationBody = classBody => {
       if (x.type === "ClassProperty") {
         return classPropertyToVariableDeclaration(x);
       }
+      if (x.type === "ClassMethod") {
+        //
+      }
       return x;
     });
   }
