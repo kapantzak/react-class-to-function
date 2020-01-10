@@ -2,6 +2,7 @@ import fs from "fs";
 import { parse } from "@babel/parser";
 import generator from "@babel/generator";
 import { validateArgs } from "./validation";
+import { convertAst } from "./astConverter";
 
 module.exports.cli = async argv => {
   const { filePath, output } = await validateArgs(argv);
@@ -12,13 +13,10 @@ module.exports.cli = async argv => {
     }
     const ast = parse(contents, {
       sourceType: "module",
-      plugins: ["jsx"]
+      plugins: ["jsx", "classProperties"]
     });
-    // const body = ((ast || {}).program || {}).body || [];
-    // for (const node of body) {
-    //   console.log(node.type);
-    // }
-    const result = generator(ast);
+    const convertedAst = convertAst(ast);
+    const result = generator(convertedAst);
     const code = result.code || "";
     try {
       fs.writeFileSync(output, code, "utf8");
