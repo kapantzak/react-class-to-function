@@ -1,9 +1,12 @@
-const fs = require("fs");
-const babelParser = require("@babel/parser");
+import fs from "fs";
+import path from "path";
+import readline from "readline";
+import { parse } from "@babel/parser";
+import generator from "@babel/generator";
 
-module.exports.cli = argv => {
+module.exports.cli = async argv => {
   const filePath = argv.path;
-  const output = argv.out || process.cwd();
+  const output = argv.out || path.join(process.cwd(), "output.js");
 
   // --path: The file to convert
   if (!filePath) {
@@ -16,20 +19,49 @@ module.exports.cli = argv => {
 
   // --out
   if (!fs.existsSync(output)) {
-    throw new Error("Please provide a valid output path with --out option");
+    fs.writeFileSync(output);
+  } else {
+    const answer = await ask(
+      `File ${output} already exists. Whould you like to overwrite its contents? (Y/N) `
+    );
+    if (answer.trim().toLowerCase() === "n") {
+      console.log("Stopping execution...");
+      return;
+    }
   }
 
   fs.readFile(filePath, "utf8", (err, contents) => {
     if (err) {
       throw new Error(err);
     }
-    const ast = babelParser.parse(contents, {
+    const ast = parse(contents, {
       sourceType: "module",
       plugins: ["jsx"]
     });
-    const body = ((ast || {}).program || {}).body || [];
-    for (const node of body) {
-      console.log(node.type);
+    // const body = ((ast || {}).program || {}).body || [];
+    // for (const node of body) {
+    //   console.log(node.type);
+    // }
+    const result = generator(ast);
+    const code = result.code || "";
+    try {
+      fs.writeFileSync(output, code, "utf8");
+      console.log("Success");
+    } catch (e) {
+      console.error(e);
     }
   });
 };
+
+function ask(question) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  return new Promise(res =>
+    rl.question(question, answer => {
+      rl.close();
+      res(answer);
+    })
+  );
+}
