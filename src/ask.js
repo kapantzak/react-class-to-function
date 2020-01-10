@@ -1,6 +1,6 @@
 import readline from "readline";
 
-export function ask(question) {
+export const ask = question => {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -11,4 +11,4 @@ export function ask(question) {
       res(answer);
     })
   );
-}
+};
