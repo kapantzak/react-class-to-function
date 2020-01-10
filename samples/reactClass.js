@@ -5,28 +5,20 @@ class App extends Component {
   alertName = () => {
     alert('John Doe');
   };
-
-  render() {
-    return (
-      <div>
-        <h3> This is a Class Component </h3>
-        <button onClick={this.alertName}> Alert </button>
-      </div>
-    );
+  
+  methodName = () => {
+	console.log('test');
   }
-}
-
-class App2 extends Component {
-	
-  alertName2 = () => {
-    alert('John Doe');
-  };
+  
+  //componentDidMount() {
+    //console.log("");
+  //}
 
   render() {
     return (
       <div>
-        <h3> This is a Class Component </h3>
         <button onClick={this.alertName}> Alert </button>
+		<input type='checkbox' onChange={this.methodName} />
       </div>
     );
   }

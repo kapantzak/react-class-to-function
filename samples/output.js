@@ -5,25 +5,14 @@ function App(props) {
     alert('John Doe');
   };
 
-  render() {
-    return <div>
-        <h3> This is a Class Component </h3>
-        <button onClick={this.alertName}> Alert </button>
-      </div>;
-  }
-}
-
-function App2(props) {
-  const alertName2 = () => {
-    alert('John Doe');
+  const methodName = () => {
+    console.log('test');
   };
 
-  render() {
-    return <div>
-        <h3> This is a Class Component </h3>
-        <button onClick={this.alertName}> Alert </button>
+  return <div>
+        <button onClick={alertName}> Alert </button>
+		<input type='checkbox' onChange={methodName} />
       </div>;
-  }
 }
 
 export default App;
