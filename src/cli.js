@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
-import readline from "readline";
 import { parse } from "@babel/parser";
 import generator from "@babel/generator";
+import { ask } from "./ask";
 
 module.exports.cli = async argv => {
   const filePath = argv.path;
@@ -52,16 +52,3 @@ module.exports.cli = async argv => {
     }
   });
 };
-
-function ask(question) {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  return new Promise(res =>
-    rl.question(question, answer => {
-      rl.close();
-      res(answer);
-    })
-  );
-}
