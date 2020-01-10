@@ -1,3 +1,6 @@
+import { getArgsForFunctionGenerator } from "./classDeclarationHelper";
+import { generateFunction } from "./functionGenerator";
+
 export const convertAst = ast => {
   const body = ((ast || {}).program || {}).body || [];
   let convertedBody = [];
@@ -13,4 +16,7 @@ export const convertAst = ast => {
   return convertedAst;
 };
 
-export const convertClassToFunction = classDeclaration => classDeclaration;
+export const convertClassToFunction = classDeclaration => {
+  const functionGeneratorArgs = getArgsForFunctionGenerator(classDeclaration);
+  return generateFunction(functionGeneratorArgs);
+};
