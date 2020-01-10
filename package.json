@@ -4,7 +4,8 @@
   "description": "Convert React class to function components",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:coverage": "npm test -- --coverage"
   },
   "bin": {
     "react-ctf": "bin/react-ctf.js"
@@ -20,5 +21,8 @@
     "esm": "^3.2.25",
     "yargs": "^15.0.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/preset-env": "^7.7.7",
+    "jest": "^24.9.0"
+  }
 }
