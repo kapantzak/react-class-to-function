@@ -1,6 +1,6 @@
 import { getArgsForFunctionGenerator } from "./classDeclarationHelper";
 import { generateFunction } from "./functionGenerator";
-import { findThisExpressions } from "./removeThis";
+import { traverseTree } from "./traverseTree";
 
 export const convertAst = ast => {
   const body = ((ast || {}).program || {}).body || [];
@@ -14,7 +14,7 @@ export const convertAst = ast => {
   }
   const convertedAst = JSON.parse(JSON.stringify(ast));
   convertedAst.program.body = convertedBody;
-  findThisExpressions(convertedAst);
+  traverseTree(convertedAst);
   return convertedAst;
 };
 
