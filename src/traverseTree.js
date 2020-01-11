@@ -53,12 +53,20 @@ export const generateStateHook = prop => {
   `);
 
   const getterName = prop.key.name;
-  const setterName = `set${getterName[0].toUpperCase()}${getterName.slice(1)}`;
+  const setterName = generateSetterName(getterName);
   return buildRequire({
     getter: t.identifier(getterName),
     setter: t.identifier(setterName),
     defaultValue: prop.value
   });
+};
+
+export const generateSetterName = propName => {
+  if (propName && propName.length > 0) {
+    const sliced = propName.length > 1 ? propName.slice(1) : "";
+    return `set${propName[0].toUpperCase()}${sliced}`;
+  }
+  return null;
 };
 
 export const memberExpressionIsState = memberExpression => {
