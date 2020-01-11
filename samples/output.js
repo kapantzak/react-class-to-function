@@ -5,7 +5,7 @@ function App(props) {
   const [name, setName] = useState("John");
 
   const methodName = () => {
-    console.log(props.name);
+    state.name = "John";
   };
 
   return <div>

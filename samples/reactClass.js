@@ -11,7 +11,7 @@ class App extends Component {
   }
 
   methodName = () => {
-    console.log(this.props.name);
+    this.state.name = "John";
   };
 
   //componentDidMount() {
