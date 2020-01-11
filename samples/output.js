@@ -1,13 +1,8 @@
 import React, { Component } from "react";
 
 function App(props) {
-  constructor(props) {
-    super(props);
-    state = {
-      count: 0
-    };
-    methodName = methodName.bind(this);
-  }
+  const [count, setCount] = useState(0);
+  const [name, setName] = useState("John");
 
   const methodName = () => {
     console.log(props.name);

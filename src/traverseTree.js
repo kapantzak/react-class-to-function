@@ -1,10 +1,17 @@
 import traverse from "@babel/traverse";
+import template from "@babel/template";
+import * as t from "@babel/types";
 
 export const traverseTree = ast => {
   traverse(ast, {
     ClassMethod: path => {
       if (path.node.kind === "constructor") {
         const state = exportStateOutOfContructor(path.node);
+        if (state) {
+          path.replaceWithMultiple(state);
+        } else {
+          path.remove();
+        }
       }
     },
     ThisExpression: path => {
@@ -26,16 +33,39 @@ export const exportStateOutOfContructor = ctor => {
     return isAssignment && isEqualOperator && leftIsState;
   });
   if (stateAssignment) {
-    const stateProps = x.expression.right;
-    // --> get object props
+    const stateProps =
+      (stateAssignment.expression.right || {}).properties || [];
+    return generateStateHooks(stateProps);
   }
-  return ctor;
+  return null;
+};
+
+export const generateStateHooks = props => {
+  if (props && Array.isArray(props)) {
+    return props.map(prop => generateStateHook(prop));
+  }
+  return null;
+};
+
+export const generateStateHook = prop => {
+  const buildRequire = template(`
+    const [%%getter%%, %%setter%%] = useState(%%defaultValue%%);
+  `);
+
+  const getterName = prop.key.name;
+  const setterName = `set${getterName[0].toUpperCase()}${getterName.slice(1)}`;
+  return buildRequire({
+    getter: t.identifier(getterName),
+    setter: t.identifier(setterName),
+    defaultValue: prop.value
+  });
 };
 
 export const memberExpressionIsState = memberExpression => {
   const hasThisExpression =
-    ((memberExpression.object || {}).object || {}).type === "ThisExpression";
-  const hasPropertyState = memberExpression.property.name === "state";
+    ((memberExpression || {}).object || {}).type === "ThisExpression";
+  const hasPropertyState =
+    ((memberExpression || {}).property || {}).name === "state";
   return hasThisExpression && hasPropertyState;
 };
 
