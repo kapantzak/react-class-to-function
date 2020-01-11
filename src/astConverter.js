@@ -1,5 +1,6 @@
 import { getArgsForFunctionGenerator } from "./classDeclarationHelper";
 import { generateFunction } from "./functionGenerator";
+import { findThisExpressions } from "./removeThis";
 
 export const convertAst = ast => {
   const body = ((ast || {}).program || {}).body || [];
@@ -13,6 +14,7 @@ export const convertAst = ast => {
   }
   const convertedAst = JSON.parse(JSON.stringify(ast));
   convertedAst.program.body = convertedBody;
+  findThisExpressions(convertedAst);
   return convertedAst;
 };
 

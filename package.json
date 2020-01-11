@@ -18,6 +18,7 @@
   "dependencies": {
     "@babel/generator": "^7.7.7",
     "@babel/parser": "^7.7.7",
+    "@babel/traverse": "^7.7.4",
     "esm": "^3.2.25",
     "yargs": "^15.0.2"
   },

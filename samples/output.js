@@ -1,17 +1,20 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 function App(props) {
-  const alertName = () => {
-    alert('John Doe');
-  };
+  constructor(props) {
+    super(props);
+    state = {
+      count: 0
+    };
+    methodName = methodName.bind(this);
+  }
 
   const methodName = () => {
-    console.log('test');
+    console.log(props.name);
   };
 
   return <div>
-        <button onClick={alertName}> Alert </button>
-		<input type='checkbox' onChange={methodName} />
+        <input type="checkbox" onChange={methodName} />
       </div>;
 }
 

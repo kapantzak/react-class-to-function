@@ -21,6 +21,9 @@ export const getFunctionBodyFromClassDeclarationBody = classBody => {
         return classPropertyToVariableDeclaration(x);
       }
       if (x.type === "ClassMethod") {
+        if (x.kind === "constructor") {
+          return x;
+        }
         return checkClassMethodName(x);
       }
       return x;
@@ -47,7 +50,7 @@ export const renderMethodToReturnStatement = classMethod => {
       x => x.type === "ReturnStatement"
     );
     if (returnStatement) {
-      return removeMemberExpressionsFromReturnStatement(returnStatement);
+      return removeThisExpressionsFromReturnStatement(returnStatement);
     } else {
       throw new Error("No return statement found inside render method");
     }
@@ -56,10 +59,10 @@ export const renderMethodToReturnStatement = classMethod => {
   }
 };
 
-export const removeMemberExpressionsFromReturnStatement = returnStatement => {
+export const removeThisExpressionsFromReturnStatement = returnStatement => {
   if ((returnStatement || {}).type === "ReturnStatement") {
     const newReturnStatement = JSON.parse(JSON.stringify(returnStatement));
-    newReturnStatement.argument = removeMemberExpressionsFromOpeningElements([
+    newReturnStatement.argument = removeThisExpressionsFromOpeningElements([
       newReturnStatement.argument
     ])[0];
     return newReturnStatement;
@@ -70,7 +73,7 @@ export const removeMemberExpressionsFromReturnStatement = returnStatement => {
   }
 };
 
-export const removeMemberExpressionsFromOpeningElements = jsxElements => {
+export const removeThisExpressionsFromOpeningElements = jsxElements => {
   return jsxElements.map(jsxElement => {
     if (jsxElement.type === "JSXElement") {
       const openingElement = jsxElement.openingElement;
@@ -79,7 +82,7 @@ export const removeMemberExpressionsFromOpeningElements = jsxElements => {
       );
       const children = jsxElement.children;
       if ((children || []).length > 0) {
-        jsxElement.children = removeMemberExpressionsFromOpeningElements(
+        jsxElement.children = removeThisExpressionsFromOpeningElements(
           children
         );
       }
